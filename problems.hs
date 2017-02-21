@@ -9,4 +9,3 @@ myLast (_:xs) = myLast xs
 myButLast :: [a] -> a
 myButLast [] = error "Empty dude do you even haskell"
 myButLast xs = head $ tail $ reverse xs
-length [1,2,3,4]
