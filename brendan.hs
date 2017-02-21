@@ -12,7 +12,15 @@ myButLast xs = (head . tail . reverse) xs
 elementAt :: [a] -> Int -> a
 elementAt [] index = error "Empty list"
 elementAt xs 0 = error "No zeroth element"
-elementAt xs index = head $ drop (index-1) xs
+-- elementAt xs index = head $ drop (index-1) xs
+elementAt xs index =
+  let
+    inner :: [a] -> Int -> a
+    inner list 0 = head list
+    inner [] index = error "Index out of range"
+    inner list index = inner (tail list) (index - 1)
+  in
+    inner xs (index - 1)
 
 myLength :: [a] -> Int
 myLength xs =
