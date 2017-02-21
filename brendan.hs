@@ -15,7 +15,6 @@ elementAt xs 0 = error "No zeroth element"
 elementAt xs index = head $ drop (index-1) xs
 
 myLength :: [a] -> Int
-myLength [] = 0
 myLength xs =
   let
     inner :: [a] -> Int -> Int
@@ -23,3 +22,12 @@ myLength xs =
     inner xi len = inner (tail xi) (len + 1)
   in
    inner xs 0
+
+myReverse :: [a] -> [a]
+myReverse xs =
+  let
+    inner :: [a] -> [a] -> [a]
+    inner [] dest = dest
+    inner (a:src) dest = inner src (a:dest)
+  in
+    inner xs []
