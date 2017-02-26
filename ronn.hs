@@ -1,6 +1,6 @@
 module Problems where
 
-import Data.List (reverse, head, tail, length, init)
+import Data.List (reverse, head, tail, length, init, foldl')
 -- Problem 1
 myLast :: [a] -> a
 myLast [] = error "Empty"
@@ -15,6 +15,17 @@ myButLast xs = head $ tail $ reverse xs
 -- Problem 3
 elementAt :: [a] -> Int -> a
 elementAt xs i = xs !! (i - 1)
+
+-- alt
+--elementAt' :: [a] -> Int -> a
+elementAt' [] i = error "Empty"
+elementAt' xs i =
+  let loop (x:xs) idx i = if idx == i then
+                            x
+                          else
+                            loop xs idx (i + 1)
+
+  in loop xs i 1
 
 -- Problem 4
 myLength :: [a] -> Int
