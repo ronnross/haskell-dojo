@@ -1,0 +1,10 @@
+._*
+.DS_Store
+.idea/
+.ideaHaskellLib/
+*.iml
+*.ipr
+*.iws
+.stack-work/
+*.swp
+.tags
