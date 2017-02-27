@@ -41,3 +41,82 @@ myReverse xs =
     inner (a:src) dest = inner src (a:dest)
   in
     inner xs []
+
+-- Problem 6
+isPalindrome :: (Eq a) => [a] -> Bool
+isPalindrome xs = xs == myReverse(xs)
+
+-- Problem 7
+data NestedList a = Elem a | List [NestedList a]
+
+flatten :: NestedList a  -> [a]
+flatten (Elem a) = [a]
+flatten (List xs) = 
+  let
+    loop :: [NestedList a] -> [a]
+    loop [] = []
+    loop (y:ys) = flatten y ++ loop ys
+  in
+    loop xs 
+
+flatten' :: NestedList a  -> [a]
+flatten' (Elem a) = [a]
+flatten' (List xs) = 
+  let
+    loop :: [NestedList b] -> [b] -> [b]
+    loop [] flat = flat
+    loop (y:ys) flat = loop ys (flat ++ (flatten' y))
+  in
+    loop xs []
+
+-- Problem 8
+compress :: (Eq a) => [a] -> [a]
+compress [] = []
+compress (x:xs) =
+  let
+    loop :: (Eq a) => [a] -> a -> [a]-> [a]
+    loop [] elm com = com
+    loop (y:ys) elm com
+      | y == elm   = loop ys elm com
+      | otherwise  = loop ys y (com ++ [y])
+  in
+    loop xs x [x]
+
+compress' :: (Eq a) => [a] -> [a]
+compress' [] = []
+compress' (x:xs) =
+  let
+    loop :: (Eq a) => [a] -> a -> [a]-> [a]
+    loop [] elm com = com
+    loop (y:ys) elm com =
+      if y == elm then
+        loop ys elm com
+      else
+        loop ys y (com ++ [y])
+  in
+    loop xs x [x]
+
+-- Problem 9
+pack :: (Eq a) => [a] -> [[a]]
+pack [] = []
+pack (x:xs) =
+  let
+    loop :: (Eq b) => [b] -> b -> [[b]] -> [[b]]
+    loop [] e p = p
+    loop (x:xs) e (p:ps)
+      | x == e     = loop xs x ((x:p):ps)
+      | otherwise  = loop xs x ([x]:p:ps)
+  in
+    reverse $ loop xs x [[x]]
+
+-- Problem 10
+encode :: (Eq a) => [a] -> [(Int, a)]
+encode [] = []
+encode xs =
+  let
+    loop :: [[b]] -> [(Int, b)]
+    loop [] = []
+    loop (x:xs) = (length x, head x):(loop xs)
+  in
+    loop $ pack xs
+
