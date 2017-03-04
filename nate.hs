@@ -28,11 +28,11 @@ isPalindrome :: (Eq a) => [a] -> Bool
 isPalindrome xs = xs == myReverse xs
 
 -- Problem 7
--- data NestedList a = Elem a | List [NestedList a]
--- flatten :: NestedList a -> [a]
--- flatten List [] = []
--- flatten List [x] = []
--- flatten Elem x = [x]
+data NestedList a = Elem a | List [NestedList a]
+flatten :: NestedList a -> [a]
+flatten (List []) = []
+flatten (List (x:xs)) = flatten x ++ flatten (List xs)
+flatten (Elem x) = [x]
 
 -- Problem 8
 compress :: (Eq a) => [a] -> [a]
