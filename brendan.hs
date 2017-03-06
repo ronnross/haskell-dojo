@@ -120,3 +120,38 @@ encode xs =
   in
     loop $ pack xs
 
+-- Box Rings
+printRect :: Integer -> Integer -> String
+printRect x y =
+  let
+    maxX = fromIntegral (x + 1)/2.0
+    maxY = fromIntegral (y + 1)/2.0
+    entryWidth = (length . show) $ floor $ min maxX maxY
+    
+    lpad :: String -> String
+    lpad str = replicate (entryWidth - length str) '0' ++ str
+
+    getValue :: Integer -> Integer -> String
+    getValue x y =
+      let
+        xVal = maxX - (abs $ fromIntegral x - maxX)
+        yVal = maxY - (abs $ fromIntegral y - maxY)
+      in
+        (lpad . show . floor) $ min xVal yVal
+    
+    getRow :: Integer -> Integer -> Integer -> [String]
+    getRow x maxX y
+      | x == maxX   = [getValue x y]
+      | otherwise   = (getValue x y):(getRow (x + 1) maxX y)
+    
+    getRowStr :: Integer -> Integer -> Integer -> String
+    getRowStr x maxX y = unwords $ getRow x maxX y
+
+    loop :: Integer -> Integer -> Integer -> [String]
+    loop maxX y maxY
+      | y == maxY   = [(getRowStr 1 maxX y)]
+      | otherwise   =  (getRowStr 1 maxX y):(loop maxX (y + 1) maxY)
+  in
+    unlines $ loop x 1 y
+
+-- putStrLn $ printRect 30 30
