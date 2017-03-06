@@ -47,3 +47,24 @@ myReverse xs =
                       else
                         loop xs (x:col)
   in loop xs []
+
+-- Problem 6
+isPalindrome :: (Eq a) => [a] -> Bool
+isPalindrome xs = xs == reverse xs
+
+
+-- Problem 7
+--flatten :: a -> [a]
+--flatten (Elem x ) = [x]
+--flatten (List xs) =  foldr (++) [] $ map flatten xs
+
+-- Problem 8
+-- compress :: [a] -> [a]
+compress xs =
+  let compressor (x:xs) col =
+                  if x == (head xs) then
+                    compressor xs col
+                  else
+                    compressor xs (x:col)
+  in
+    compressor xs []
