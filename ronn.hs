@@ -55,11 +55,16 @@ isPalindrome xs = xs == reverse xs
 
 -- Problem 7
 --flatten :: a -> [a]
---flatten (Elem x ) = [x]
---flatten (List xs) =  foldr (++) [] $ map flatten xs
+-- flatten (x:xs) = [x]
+-- flatten (x:xs) =  foldr (++) [] $ map flatten xs
+-- (List [Elem 1, List [Elem 2, List [Elem 3, Elem 4], Elem 5]])
+-- result [1,2,3,4,5]
 
+data NestedList a = Elem a | List [NestedList a]
+
+flatten (x:xs) =
 -- Problem 8
--- compress :: [a] -> [a]
+{- compress :: [a] -> [a]
 compress xs =
   let compressor (x:xs) col =
                   if x == (head xs) then
@@ -68,3 +73,4 @@ compress xs =
                     compressor xs (x:col)
   in
     compressor xs []
+-}
