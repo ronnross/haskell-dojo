@@ -30,3 +30,15 @@ myReverse xs = reverse xs
 -- Problem 6
 isPalindrome :: Eq a => [a] -> Bool
 isPalindrome xs = xs == reverse xs
+
+-- Concentric ring grid (has type signature errors :/ )
+generateGrid :: (Num a) => (Eq a) => a -> a -> [Char]
+generateGrid x y = myGrid x y x y
+
+myGrid :: (Num a) => (Eq a) => a -> a -> a -> a -> [Char]
+myGrid x 1 w h = myRow x 1 w h
+myGrid x y w h = (myGrid x (y - 1) w h) ++ myRow x y w h ++ "\n"
+
+myRow :: a -> a -> a -> a -> [Char]
+myRow 1 y w h = minimum 1 y w h
+myRow x y w h = myRow (x - 1) y w h ++ minimum x y w h
