@@ -1,6 +1,6 @@
 module Problems where
 
-import Data.List (reverse, head, tail, length, init, map)
+import Data.List (reverse, head, tail, length, init, map, concat)
 
 
 data Maybe' a = Nil | Resolve a deriving Show
@@ -76,3 +76,16 @@ encodeModified =
     encodeRun xs = Multiple (length xs) (head xs)
   in
     map encodeRun . pack -- ["aaaa","b","cc","aa","d","eeee"]
+
+
+-- Problem 12
+-- [Multiple 4 'a',Single 'b',Multiple 2 'c', Multiple 2 'a',Single 'd',Multiple 4 'e']
+decodeModified :: [EncodedEl a] -> [a]
+decodeModified xs =
+  let expand :: EncodedEl a -> [a]
+      expand (Single x) = [x]
+      expand (Multiple 0 x) = []
+      expand (Multiple n x) = x : expand (Multiple (n-1) x)
+  in
+    concat $ map expand xs
+
