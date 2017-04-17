@@ -2,7 +2,7 @@
 module Lists where
 
 import Control.Arrow ((&&&))
-import Data.List (foldl')
+import Data.List (foldl', unfoldr)
 
 myLast :: [a] -> a
 myLast []     = undefined
@@ -74,3 +74,79 @@ encode = map toPair . pack
 
 encode' :: (Eq a) => [a] -> [(Int, a)]
 encode' = map (length &&& head) . pack
+
+-- Problem 11
+
+data Grouping a = Single a | Multiple Int a
+                  deriving Show
+
+encodeModified :: (Eq a) => [a] -> [Grouping a]
+encodeModified = map toGrouping . encode'
+  where toGrouping (n, x) = if n == 1 then Single x else Multiple n x
+
+-- Problem 12
+
+decodeModified :: [Grouping a] -> [a]
+decodeModified []                = []
+decodeModified (Single x:xs)     = x : decodeModified xs
+decodeModified (Multiple n x:xs) = replicate n x ++ decodeModified xs
+
+decodeModified' :: [Grouping a] -> [a]
+decodeModified' = (>>= expand)
+  where expand (Single x)     = [x]
+        expand (Multiple n x) = replicate n x
+
+-- Problem 14
+
+dupli :: [a] -> [a]
+dupli = (>>= replicate 2)
+
+-- Problem 15
+
+repli :: [a] -> Int -> [a]
+repli xs n = xs >>= replicate n
+
+-- Problem 16
+
+dropEvery :: [a] -> Int -> [a]
+dropEvery [] _ = []
+dropEvery xs n = loop n xs
+  where loop _ []     = []
+        loop 1 (_:xs) = loop n xs
+        loop i (x:xs) = x : loop (pred i) xs
+
+chunk n = unfoldr maybeSplitAt
+  where maybeSplitAt [] = Nothing
+        maybeSplitAt xs = Just $ splitAt n xs
+
+dropEvery' :: [a] -> Int -> [a]
+dropEvery' xs n = chunk n xs >>= take (n - 1)
+
+-- Problem 17
+
+split :: [a] -> Int -> ([a], [a])
+split xs n = loop n [] xs
+  where loop _ acc []     = (acc, [])
+        loop 0 acc xs     = (acc, xs)
+        loop i acc (x:xs) = loop (pred i) (acc ++ [x]) xs
+
+-- Problem 18
+
+slice :: [a] -> Int -> Int -> [a]
+slice xs lower upper = take (upper - lower + 1) $ drop (lower - 1) xs
+
+-- Problem 19
+
+rotate :: [a] -> Int -> [a]
+rotate xs n
+  | length xs < n = rotate xs (mod n $ length xs)
+  | otherwise     = right ++ left
+  where (left, right) = splitAt n xs
+
+-- Problem 20
+
+removeAt :: Int -> [a] -> (Maybe a, [a])
+removeAt n xs = (x, left ++ right)
+  where (left, xAndRight) = splitAt (n - 1) xs
+        (maybeX, right) = splitAt 1 xAndRight
+        x = if null maybeX then Nothing else Just $ head maybeX
