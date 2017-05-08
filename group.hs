@@ -89,3 +89,20 @@ decodeModified xs =
   in
     concat $ map expand xs
 
+
+-- Problem 13
+-- [Multiple 4 'a',Single 'b',Multiple 2 'c', Multiple 2 'a',Single 'd',Multiple 4 'e']
+encodeDirect :: (Eq a) => [a] -> [EncodedEl a]
+encodeDirect xs =
+      
+  let 
+    f :: (Eq a) => a -> [(a, Int)] -> [(a, Int)]
+    f el [] = [(el, 1)]  
+    f el acc@((lastEl, n) :ts) | el == lastEl = (lastEl, succ n):ts
+                               | otherwise    = (el, 1):acc
+
+    fn :: (a, Int) -> EncodedEl a
+    fn (x, 1) = Single x 
+    fn (x, count) = Multiple count x 
+  in
+    map fn $ foldr f [] xs
