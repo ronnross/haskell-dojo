@@ -1,5 +1,9 @@
 module JamesProblems where
 
+import System.Random
+import Control.Monad
+import Data.List
+
 -- problem 1
 myLast :: [a] -> a
 myLast [] = error "empty List"
@@ -152,3 +156,29 @@ removeAt :: Int -> [a] -> [a]
 removeAt n xs
   | n < 1 = error "out of bounds"
   | otherwise = take (n-1) xs ++  drop n xs
+
+-- problem 21
+insertAt :: a -> Int -> [a] -> [a]
+insertAt x i xs = take (i-1) xs ++ x : drop i xs
+
+-- problem 22
+range :: Int -> Int -> [Int]
+range s f = takeWhile (<=f) $ iterate (+1) s
+
+-- problem 23
+rndSelect :: Int -> [a] -> IO [a]
+rndSelect n xs
+  | n < 0 = error "must be greater than 0"
+  | otherwise = replicateM n $ randomRIO (0,(length xs) -1) >>= \i -> return (xs !! i)
+
+-- problem 24
+rndSelect' :: Int -> Int -> IO [Int]
+rndSelect' n m
+  | n < 0 = error "first argument must be positive"
+  | m < 1 = error "second argument must be postitive"
+  | otherwise =  do rands <- newStdGen >>= \g -> return (randomRs (1, m) g)
+                    return $ take n $ nub rands
+
+rnd
+
+
